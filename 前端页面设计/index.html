@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IM聊天窗口</title>
+
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="libs/layerUI/2.2.5/css/layui.css">
+<link rel="stylesheet" href="css/downla.css" />
+<script type="text/javascript" src="js/downla.js"></script>
+<script type="text/javascript" src="js/hs.js"></script>
+</head>
+<body>
+
+<div class="mainBox">
+	<div class="BoxHead">
+		<div class="headImg">
+			<img src="img/head001.jpg">
+		</div>
+		<div class="internetName"><B>柒月风华 - 探索未知的世界</B>
+		</div>
+		<div class="rightTags">公告栏</div>
+	</div>
+	<div class="context">
+		<div class="conLeft">
+			<ul>
+				<li class="bg">
+					<div class="liLeft"><img src="img/head001.jpg"></div>
+					<div class="liRight">
+						<span class="intername">柒月风华</span>
+						<span class="infor">公共聊天室</span>
+					</div>
+				</li>
+				
+			</ul>
+		</div>
+		
+		<div class="conRight">
+			<div class="Righthead">
+				<div class="headName">柒月风华</div>
+				<div class="headConfig">
+					<ul>
+						<li>在线人数：<b><span id='onlineusercount'>1</span></b></li>
+					</ul>
+				</div>
+			</div>
+			<div class="RightCont">
+				<ul class="newsList">
+				
+				</ul>
+			</div>
+			<div class="RightFoot">
+				<div class="siliao_div">私聊人员：
+				
+				
+				
+				
+				 
+
+
+<div class="pre" id="input1">
+	<input class="newinput" type="text" placeholder="全体">
+	<div class="input_div" style="display: none;">
+		<span class="soption" data-val="">全体</span>
+
+
+	</div>
+	<input class="savedata" type="hidden" value=''>
+	<div style="clear:both"></div>
+</div>
+
+
+				
+				
+				
+				
+				</div>
+				<div class="inputBox">
+					<textarea id="dope" class="layui-textarea" style="display: none;" name="" rows="" cols=""></textarea>
+					
+
+					<button class="sendBtn">发送(s)</button>
+				</div>
+			</div>
+		</div>
+		<div class="conRight_gg">
+		<br><br><br>
+		通知公告<br><br>
+		<span style="line-height:30px;">
+		柒月风华IM聊天室正式运行<br>
+		暂时仅仅支持一个公共聊天室<br>
+		网站打算开源<br>
+		后续会继续完善~<br>
+		</span>
+		<span style="line-height:30px;float:right;">
+		BY：站长管理员&nbsp;&nbsp;&nbsp;
+		</span>
+		
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="libs/layerUI/2.2.5/layui.js"></script>
+<script type="text/javascript" src="js/chat.js"></script>
+<script type="text/javascript">
+		//sessionStorage.clear();
+		var arr=["img/20170926103645_19.jpg","img/20170926103645_03_02.jpg","img/20170926103645_19.jpg","img/20170926103645_54.jpg","img/20170926103645_29.jpg","img/20170926103645_04.jpg","img/20170926103645_03_02.jpg","img/20170926103645_27.jpg"];
+		var aa=Math.floor((Math.random()*arr.length));
+	    var data_name = sessionStorage.getItem('cr_name');
+	    var data_img = sessionStorage.getItem('cr_img');
+	    var guid="";
+		var online_user_arr= new HashMap(); 
+	    if(data_name==null||data_name=='undefined'||data_name==''){
+			var user = prompt("请输入你的名字:","");
+          	if (user!="" && user!=null){
+            	sessionStorage.setItem('cr_name', user);
+        	}
+	    }
+	    if(data_img==null||data_img=='undefined'||data_img==''){sessionStorage.setItem('cr_img', arr[aa]);}
+		
+</script>
+<script type="text/javascript">
+    var start = function () {
+		//var inc = document.getElementById('incomming');
+		var wsImpl = window.WebSocket || window.MozWebSocket;
+		//var form = document.getElementById('sendForm');
+		//var input = document.getElementById('sendText');
+		
+		//inc.innerHTML += "connecting to server ..<br/>";
+
+		// create a new websocket and connect
+		window.ws = new wsImpl('ws://127.0.0.1:9988');
+
+		// when data is comming from the server, this metod is called
+		ws.onmessage = function (evt) {
+			var retobj=jQuery.parseJSON(evt.data)
+			//自己的消息，不接受
+			if(retobj.from_id==guid){return;} 
+			//console.log(evt.data)
+			$("#onlineusercount").text(retobj.onlineusercount);
+			
+			if(retobj.msgtype=='userenter'){
+				guid=retobj.from_id;
+				var answer='';
+				answer+='<li class="sys_tips">'+retobj.pcontent+'</li>';
+				$('.newsList').append(answer);	
+				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+				//发送上线消息
+				var jsonobj={msgtype:'userenter_reqgb',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:"要求服务器发送上线广播"}
+				ws.send(JSON.stringify(jsonobj));
+				//获取当前所有用户信息
+				jsonobj={msgtype:'getOnlineUsers',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:"要求发送用户信息"}
+				ws.send(JSON.stringify(jsonobj));
+			}
+			
+			if(retobj.msgtype.split("_")[0]=="system"){
+				var opt=retobj.msgtype.split("_")[1];
+				if(opt=="userenter"){
+					online_user_arr.put(retobj.from_id,retobj.from_name);
+					$(".input_div").append('<span class="soption" data-val="'+retobj.from_id+'">'+retobj.from_name+'</span>');
+					BindEvet(retobj.from_id,"input1");
+				}
+				if(opt=="userexit"){online_user_arr.remove(retobj.from_id);$('[data-val="'+retobj.from_id+'"]').remove();}
+				
+				if(opt=="getOnlineUsers"){
+					console.log(retobj.pcontent);
+					var onlineuser=$.parseJSON(retobj.pcontent);
+					$.each(onlineuser, function(key, val) {
+						online_user_arr.put(key,val);
+						$(".input_div").append('<span class="soption" data-val="'+key+'">'+val+'</span>');
+						BindEvet(key,"input1");
+					});
+
+					retobj.pcontent="获取在线用户信息成功~";
+				}
+				var answer='';
+				answer+='<li class="sys_tips">'+getNowFormatDate().substring(0,16)+"&nbsp;"+retobj.pcontent+'</li>';
+				$('.newsList').append(answer);	
+				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+			}
+
+			if(retobj.msgtype.split("_")[0]=="message"){
+				var sfstatus="";
+				if(retobj.msgtype.split("_")[1]=='sf'){sfstatus="&nbsp;私密发送";}
+				var answer='';
+				answer+='<li>'+
+							'<div class="nesHead"><img src="'+retobj.from_headimg+'"/></div>'+
+							'<div class="new_name">'+retobj.from_name+"&nbsp;"+getNowFormatDate().substring(0,16)+sfstatus+'</div>'+
+							'<div class="news"><img class="jiao" src="img/jiao.jpg">'+retobj.pcontent+'</div>'+
+						'</li>';
+				$('.newsList').append(answer);	
+				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+			}
+			
+			
+			
+		};
+
+		// when the connection is established, this method is called
+		ws.onopen = function (evt) {
+			//inc.innerHTML += '.. connection open<br/>';
+		};
+
+		// when the connection is closed, this method is called
+		ws.onclose = function () {
+			//inc.innerHTML += '.. connection closed<br/>';
+		}
+		
+		/*form.addEventListener('submit', function(e){
+			e.preventDefault();
+			var val = input.value;
+			ws.send(val);
+			input.value = "";
+		});*/
+            
+    }
+    window.onload = start;
+</script>
+<script>
+	$('.sendBtn').on('click',function(){
+	/*$("#LAY_layedit_1").contents().find("body").on('keyup',function(event){
+		  if(event.keyCode ==13){
+			$(".sendBtn").trigger("click");
+		  }
+		});*/
+		var ans_news=GetContent();
+		
+		if(ans_news==''){
+			alert('不能为空');
+			//SetContent(GetContent().replace(/<br>/g,""))
+			return;
+		}else{
+			SetContent("");
+			var str='';
+			var smflag=($(".savedata").val()=="")?"":"&nbsp;私密发送";
+			str+='<li>'+
+				'<div class="answerHead"><img src="'+sessionStorage.getItem('cr_img')+'"/></div>'+
+				'<div class="answer_name">'+sessionStorage.getItem('cr_name')+"&nbsp;"+getNowFormatDate().substring(0,16)+smflag+'</div>'+
+				'<div class="answers"><img class="jiao" src="img/20170926103645_03_02.jpg">'+ans_news+'</div>'+
+			'</li>';
+			$('.newsList').append(str);
+			//setTimeout(answers_news,1000); 
+			<!-- $('.conLeft').find('li.bg').children('.liRight').children('.infor').text((ans_news.length>9)?ans_news.substring(0,9)+'...':ans_news.substring(0,9)); -->
+			$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+			
+			var jsonobj={msgtype:'',onlineusercount:'',postto_id:$(".savedata").val(),postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:ans_news}
+			ws.send(JSON.stringify(jsonobj));
+		}
+	})
+	
+
+
+</script>
+
+<script type="text/javascript">
+$(".rightTags").click(function(){$(".conRight_gg").toggle();});
+$(".headImg").click(function(){$(".conLeft").toggle();});
+</script>
+
+<script type="text/javascript">
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+    return currentdate;
+}
+</script>
+
+
+
+<script type="text/javascript">
+new inputSelect("input1","txt1");
+</script>
+</script>
+
+</body>
+</html>

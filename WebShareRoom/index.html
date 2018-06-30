@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IM聊天窗口</title>
+
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="libs/layerUI/2.2.5/css/layui.css">
+</head>
+<body>
+
+<div class="mainBox">
+	<div class="BoxHead">
+		<div class="headImg">
+			<img src="img/6.jpg">
+		</div>
+		<div class="internetName"><B>柒月风华在线交流平台</B></div>
+	</div>
+	<div class="context">
+		<div class="conRight">
+			<div class="Righthead">
+				<div class="headName">柒月风华-全体交流</div>
+				<div class="headConfig">
+					<ul>
+						<li>在线人数：<b><span id='onlineusercount'>1</span></b></li>
+					</ul>
+				</div>
+			</div>
+			<div class="RightCont">
+				<ul class="newsList">
+				
+				</ul>
+			</div>
+			<div class="RightFoot">
+				<div class="inputBox">
+					<textarea id="dope" class="layui-textarea" style="display: none;" name="" rows="" cols=""></textarea>
+					
+
+					<button class="sendBtn">发送(s)</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="libs/layerUI/2.2.5/layui.js"></script>
+<script type="text/javascript" src="js/chat.js"></script>
+<script type="text/javascript">
+		//sessionStorage.clear();
+		var arr=["img/20170926103645_19.jpg","img/20170926103645_03_02.jpg","img/20170926103645_19.jpg","img/20170926103645_54.jpg","img/20170926103645_29.jpg","img/20170926103645_04.jpg","img/20170926103645_03_02.jpg","img/20170926103645_27.jpg"];
+		var aa=Math.floor((Math.random()*arr.length));
+	    var data_name = sessionStorage.getItem('cr_name');
+	    var data_img = sessionStorage.getItem('cr_img');
+	    var guid="";
+	    if(data_name==null||data_name=='undefined'||data_name==''){
+			var user = prompt("请输入你的名字:","");
+          	if (user!="" && user!=null){
+            	sessionStorage.setItem('cr_name', user);
+        	}
+	    }
+	    if(data_img==null||data_img=='undefined'||data_img==''){sessionStorage.setItem('cr_img', arr[aa]);}
+</script>
+<script type="text/javascript">
+    var start = function () {
+		//var inc = document.getElementById('incomming');
+		var wsImpl = window.WebSocket || window.MozWebSocket;
+		//var form = document.getElementById('sendForm');
+		//var input = document.getElementById('sendText');
+		
+		//inc.innerHTML += "connecting to server ..<br/>";
+
+		// create a new websocket and connect
+		window.ws = new wsImpl('ws://47.95.224.130:9988');
+
+		// when data is comming from the server, this metod is called
+		ws.onmessage = function (evt) {
+			var retobj=jQuery.parseJSON(evt.data)
+			//console.log(evt.data)
+			$("#onlineusercount").text(retobj.onlineusercount);
+			if(retobj.msgtype=='userenter'){guid=retobj.from_id;}
+			if(!(retobj.msgtype=='message'&&retobj.from_id!=guid||retobj.msgtype=='userenter')){return;}
+			
+			//if(retobj!="message"){return;}
+			var answer='';
+			answer+='<li>'+
+						'<div class="nesHead"><img src="'+retobj.from_headimg+'"/></div>'+
+						'<div class="new_name">'+retobj.from_name+'</div>'+
+						'<div class="news"><img class="jiao" src="img/jiao.jpg">'+retobj.pcontent+'</div>'+
+					'</li>';
+			$('.newsList').append(answer);	
+			$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+		};
+
+		// when the connection is established, this method is called
+		ws.onopen = function (evt) {
+			//inc.innerHTML += '.. connection open<br/>';
+		};
+
+		// when the connection is closed, this method is called
+		ws.onclose = function () {
+			//inc.innerHTML += '.. connection closed<br/>';
+		}
+		
+		/*form.addEventListener('submit', function(e){
+			e.preventDefault();
+			var val = input.value;
+			ws.send(val);
+			input.value = "";
+		});*/
+            
+    }
+    window.onload = start;
+</script>
+<script>
+	$('.sendBtn').on('click',function(){
+		var ans_news=GetContent();;
+		if(ans_news==''){
+			alert('不能为空');
+		}else{
+			SetContent("");
+			var str='';
+			str+='<li>'+
+				'<div class="answerHead"><img src="'+sessionStorage.getItem('cr_img')+'"/></div>'+
+				'<div class="answer_name">'+sessionStorage.getItem('cr_name')+'</div>'+
+				'<div class="answers"><img class="jiao" src="img/20170926103645_03_02.jpg">'+ans_news+'</div>'+
+			'</li>';
+			$('.newsList').append(str);
+			//setTimeout(answers_news,1000); 
+			$('.conLeft').find('li.bg').children('.liRight').children('.infor').text((ans_news.length>9)?ans_news.substring(0,9)+'...':ans_news.substring(0,9));
+			$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+			
+			var jsonobj={msgtype:'',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:ans_news}
+			ws.send(JSON.stringify(jsonobj));
+		}
+	})
+</script>
+</body>
+</html>

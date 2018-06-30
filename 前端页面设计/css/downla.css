@@ -1,0 +1,7 @@
+.pre{display:inline;}
+.newinput{ border-radius:4px;width:250px;padding: 2px 0px 2px 8px; margin-bottom: -1px; background: url(../img/1.jpg) no-repeat scroll right center; border: 1px solid #ccc; box-shadow: 0 1px 0 0 #eee inset; cursor: default;font-size:16px;}
+.newinput:focus{border-radius:4px;cursor: text;font-size:16px;}
+.input_div{ border-radius:4px;position: absolute;bottom: 234px;max-height:300px;overflow:auto;left:95px;background:white;width:254px;border: 1px solid #ddd; border-radius: 0 0 3px 3px; display: none; }
+.input_div{ border-radius:4px;position: absolute;bottom: 234px;max-height:300px;overflow:auto;left:95px;background:white;width:254px;border: 1px solid #ddd; border-radius: 0 0 3px 3px; display: none; }
+.soption{height:30px;border-radius:4px;display: block; padding: 2px 5px 2px 8px;font-size:16px;}
+.soption:hover{height:30px;border-radius:4px;background: #E8E8E8; border-top: 1px dotted #ddd; border-bottom: 1px dotted #ddd; padding: 1px 5px 2px 8px;font-size:16px;}
