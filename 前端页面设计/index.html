@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="css/downla.css" />
 <script type="text/javascript" src="js/downla.js"></script>
 <script type="text/javascript" src="js/hs.js"></script>
+<script type="text/javascript" src="js/xssfilter.js"></script>
 </head>
 <body>
 
@@ -17,7 +18,7 @@
 		<div class="headImg">
 			<img src="img/head001.jpg">
 		</div>
-		<div class="internetName"><B>柒月风华 - 探索未知的世界</B>
+		<div class="internetName"><B>柒月风华 - 探索未知的世界</B>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:15px;"> 建议使用谷歌浏览器,或者极速模式浏览</span>
 		</div>
 		<div class="rightTags">公告栏</div>
 	</div>
@@ -37,7 +38,7 @@
 		
 		<div class="conRight">
 			<div class="Righthead">
-				<div class="headName">柒月风华</div>
+				<div class="headName">柒月风华&nbsp;&nbsp;&nbsp;<a href="#" onclick="setnicheng()"><span style="font-size:15px;" id="myname"></span></div></a>
 				<div class="headConfig">
 					<ul>
 						<li>在线人数：<b><span id='onlineusercount'>1</span></b></li>
@@ -87,10 +88,13 @@
 		<br><br><br>
 		通知公告<br><br>
 		<span style="line-height:30px;">
-		柒月风华IM聊天室正式运行<br>
-		暂时仅仅支持一个公共聊天室<br>
-		网站打算开源<br>
+		刚才网站正在调整,<br>
+		可能会有弹窗 ,关闭即可~!抱歉<br><br>
+
 		后续会继续完善~<br>
+		如何您想寻找问题的答案,<br>
+		请使用论坛BBS发布问题<br>
+		<a href="https://www.3003soft.top/LBBS" target="_blank" style="color:red;">柒月风华</a><br>
 		</span>
 		<span style="line-height:30px;float:right;">
 		BY：站长管理员&nbsp;&nbsp;&nbsp;
@@ -105,20 +109,48 @@
 <script type="text/javascript" src="js/chat.js"></script>
 <script type="text/javascript">
 		//sessionStorage.clear();
-		var arr=["img/20170926103645_19.jpg","img/20170926103645_03_02.jpg","img/20170926103645_19.jpg","img/20170926103645_54.jpg","img/20170926103645_29.jpg","img/20170926103645_04.jpg","img/20170926103645_03_02.jpg","img/20170926103645_27.jpg"];
+		var arr=["img/20170926103645_19.jpg","img/20170926103645_03_02.jpg","img/20170926103645_19.jpg","img/20170926103645_54.jpg","img/20170926103645_29.jpg","img/20170926103645_04.jpg","img/tou.jpg","img/20170926103645_27.jpg"];
 		var aa=Math.floor((Math.random()*arr.length));
 	    var data_name = sessionStorage.getItem('cr_name');
 	    var data_img = sessionStorage.getItem('cr_img');
 	    var guid="";
 		var online_user_arr= new HashMap(); 
-	    if(data_name==null||data_name=='undefined'||data_name==''){
-			var user = prompt("请输入你的名字:","");
-          	if (user!="" && user!=null){
-            	sessionStorage.setItem('cr_name', user);
-        	}
-	    }
-	    if(data_img==null||data_img=='undefined'||data_img==''){sessionStorage.setItem('cr_img', arr[aa]);}
 		
+		$(function(){
+			if(data_name==null||data_name=='undefined'||data_name==''){
+				var user = prompt("请输入你的名字:","");
+				user=xssscriptreplace(user);
+				if (user!="" && user!=null && user!="null"){
+					sessionStorage.setItem('cr_name', user);
+				}else{sessionStorage.setItem('cr_name', "游客");}
+				<!-- layer.prompt({title: '请输入你的名字:', formType: 0}, function(pass, index){ -->
+					<!-- if (pass!="" && pass!=null){ -->
+						<!-- sessionStorage.setItem('cr_name', pass); -->
+					<!-- } -->
+					 <!-- layer.close(index); -->
+				<!-- }); -->
+			}
+			if(data_img==null||data_img=='undefined'||data_img==''){sessionStorage.setItem('cr_img', arr[aa]);}
+			
+		})
+	    
+		
+		function setnicheng(){
+			<!-- var user = prompt("更新您的昵称:",""); -->
+          	<!-- if (user!="" && user!=null){ -->
+            	<!-- sessionStorage.setItem('cr_name', user); -->
+        	<!-- } -->
+			
+			layer.prompt({title: '更新您的昵称:', formType: 0}, function(pass, index){
+				//pass=pass.replace(/<script.*?>.*?<//script>/ig, ''); 
+				pass=xssscriptreplace(pass);
+				if (pass!="" && pass!=null&&pass!="null"){
+					sessionStorage.setItem('cr_name', pass);
+				}else{sessionStorage.setItem('cr_name', "游客");}
+				 layer.close(index);
+				 location.reload();
+			});
+		}
 </script>
 <script type="text/javascript">
     var start = function () {
@@ -130,20 +162,20 @@
 		//inc.innerHTML += "connecting to server ..<br/>";
 
 		// create a new websocket and connect
-		window.ws = new wsImpl('ws://127.0.0.1:9988');
+		window.ws = new wsImpl('ws://47.95.224.130:9988');
 
 		// when data is comming from the server, this metod is called
 		ws.onmessage = function (evt) {
 			var retobj=jQuery.parseJSON(evt.data)
 			//自己的消息，不接受
-			if(retobj.from_id==guid){return;} 
+			if(retobj.from_id==guid){$("#myname").empty().append("昵称："+retobj.from_name);return;} 
 			//console.log(evt.data)
 			$("#onlineusercount").text(retobj.onlineusercount);
 			
 			if(retobj.msgtype=='userenter'){
 				guid=retobj.from_id;
 				var answer='';
-				answer+='<li class="sys_tips">'+retobj.pcontent+'</li>';
+				answer+='<li class="sys_tips">'+xssscriptreplace(retobj.pcontent)+'</li>';
 				$('.newsList').append(answer);	
 				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
 				//发送上线消息
@@ -157,25 +189,26 @@
 			if(retobj.msgtype.split("_")[0]=="system"){
 				var opt=retobj.msgtype.split("_")[1];
 				if(opt=="userenter"){
-					online_user_arr.put(retobj.from_id,retobj.from_name);
-					$(".input_div").append('<span class="soption" data-val="'+retobj.from_id+'">'+retobj.from_name+'</span>');
+					online_user_arr.put(retobj.from_id,xssscriptreplace(retobj.from_name));
+					
+					$(".input_div").append('<span class="soption" data-val="'+retobj.from_id+'">'+xssscriptreplace(retobj.from_name)+'</span>');
 					BindEvet(retobj.from_id,"input1");
 				}
 				if(opt=="userexit"){online_user_arr.remove(retobj.from_id);$('[data-val="'+retobj.from_id+'"]').remove();}
 				
 				if(opt=="getOnlineUsers"){
-					console.log(retobj.pcontent);
+					//console.log(retobj.pcontent);
 					var onlineuser=$.parseJSON(retobj.pcontent);
 					$.each(onlineuser, function(key, val) {
-						online_user_arr.put(key,val);
-						$(".input_div").append('<span class="soption" data-val="'+key+'">'+val+'</span>');
+						online_user_arr.put(key,xssscriptreplace(val));
+						$(".input_div").append('<span class="soption" data-val="'+key+'">'+xssscriptreplace(val)+'</span>');
 						BindEvet(key,"input1");
 					});
 
 					retobj.pcontent="获取在线用户信息成功~";
 				}
 				var answer='';
-				answer+='<li class="sys_tips">'+getNowFormatDate().substring(0,16)+"&nbsp;"+retobj.pcontent+'</li>';
+				answer+='<li class="sys_tips">'+getNowFormatDate().substring(0,16)+"&nbsp;"+xssscriptreplace(retobj.pcontent)+'</li>';
 				$('.newsList').append(answer);	
 				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
 			}
@@ -185,8 +218,8 @@
 				if(retobj.msgtype.split("_")[1]=='sf'){sfstatus="&nbsp;私密发送";}
 				var answer='';
 				answer+='<li>'+
-							'<div class="nesHead"><img src="'+retobj.from_headimg+'"/></div>'+
-							'<div class="new_name">'+retobj.from_name+"&nbsp;"+getNowFormatDate().substring(0,16)+sfstatus+'</div>'+
+							'<div class="nesHead"><img src="'+xssscriptreplace(retobj.from_headimg)+'"/></div>'+
+							'<div class="new_name">'+xssscriptreplace(retobj.from_name)+"&nbsp;"+getNowFormatDate().substring(0,16)+sfstatus+'</div>'+
 							'<div class="news"><img class="jiao" src="img/jiao.jpg">'+retobj.pcontent+'</div>'+
 						'</li>';
 				$('.newsList').append(answer);	
@@ -225,9 +258,13 @@
 		  }
 		});*/
 		var ans_news=GetContent();
-		
+		if(ans_news.length>300){
+		layer.msg('您输入的内容太多了');
+		<!-- alert("您输入的内容太多了~"); -->
+		return false;}
 		if(ans_news==''){
-			alert('不能为空');
+			<!-- alert('不能为空'); -->
+			layer.msg('输入内容不能为空');
 			//SetContent(GetContent().replace(/<br>/g,""))
 			return;
 		}else{
@@ -260,21 +297,22 @@ $(".headImg").click(function(){$(".conLeft").toggle();});
 
 <script type="text/javascript">
 function getNowFormatDate() {
-    var date = new Date();
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + date.getHours() + seperator2 + date.getMinutes()
-            + seperator2 + date.getSeconds();
-    return currentdate;
+    return new Date().Format("yyyy-MM-dd hh:mm");;
+}
+Date.prototype.Format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
 }
 </script>
 
