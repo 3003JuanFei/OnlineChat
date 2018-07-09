@@ -230,7 +230,8 @@
 						$('.newsList').append(answer);	
 						$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
 					});
-					return;
+					//return;
+					retobj.pcontent="以上是历史消息,欢迎发言~~";
 				}
 				
 				var answer='';
@@ -250,6 +251,7 @@
 						'</li>';
 				$('.newsList').append(answer);	
 				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+				playSound();
 			}
 			
 			
@@ -347,7 +349,38 @@ Date.prototype.Format = function (fmt) { //author: meizz
 <script type="text/javascript">
 new inputSelect("input1","txt1");
 </script>
+
+
+<script language="javascript">
+playSound();
+function playSound()
+    {
+      var borswer = window.navigator.userAgent.toLowerCase();
+      if ( borswer.indexOf( "ie" ) >= 0 )
+      {
+        //IE内核浏览器
+        var strEmbed = '<embed name="embedPlay" src="http://3003soft.top/im/dingdong.mp3" autostart="true" hidden="true" loop="false"></embed>';
+        if ( $( "body" ).find( "embed" ).length <= 0 )
+          $( "body" ).append( strEmbed );
+        var embed = document.embedPlay;
+
+        //浏览器不支持 audion，则使用 embed 播放
+        embed.volume = 100;
+        //embed.play();这个不需要
+      } else
+      {
+        //非IE内核浏览器
+        var strAudio = "<audio id='audioPlay' src='http://3003soft.top/im/dingdong.mp3' hidden='true'>";
+        if ( $( "body" ).find( "audio" ).length <= 0 )
+          $( "body" ).append( strAudio );
+        var audio = document.getElementById( "audioPlay" );
+
+        //浏览器支持 audion
+        audio.play();
+      }
+    }
 </script>
+
 
 </body>
 </html>
