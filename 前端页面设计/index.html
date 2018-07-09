@@ -95,6 +95,7 @@
 		如何您想寻找问题的答案,<br>
 		请使用论坛BBS发布问题<br>
 		<a href="https://www.3003soft.top/LBBS" target="_blank" style="color:red;">柒月风华</a><br>
+		GitHub地址:<a href="https://github.com/LightXYZ/OnlineChat" target="_blank">GitHub地址</a><br>
 		</span>
 		<span style="line-height:30px;float:right;">
 		BY：站长管理员&nbsp;&nbsp;&nbsp;
@@ -184,6 +185,12 @@
 				//获取当前所有用户信息
 				jsonobj={msgtype:'getOnlineUsers',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:"要求发送用户信息"}
 				ws.send(JSON.stringify(jsonobj));
+				
+				//获取历史消息
+				var jobj={msgtype:'getPreMessage',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:"获取历史消息"}
+				ws.send(JSON.stringify(jobj));
+				
+				
 			}
 			
 			if(retobj.msgtype.split("_")[0]=="system"){
@@ -207,6 +214,25 @@
 
 					retobj.pcontent="获取在线用户信息成功~";
 				}
+				
+				if(opt=="getPreMessage"){
+					//console.log(retobj.pcontent)
+					
+					var msgqueue=$.parseJSON(retobj.pcontent);
+					$.each(msgqueue, function(key, val) {
+						//console.log(val)
+						var answer='';
+						answer+='<li>'+
+									'<div class="nesHead"><img src="'+xssscriptreplace(val.from_headimg)+'"/></div>'+
+									'<div class="new_name">'+xssscriptreplace(val.from_name)+"&nbsp;"+getNowFormatDate().substring(0,16)+'</div>'+
+									'<div class="news"><img class="jiao" src="img/jiao.jpg">'+val.pcontent+'</div>'+
+								'</li>';
+						$('.newsList').append(answer);	
+						$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+					});
+					return;
+				}
+				
 				var answer='';
 				answer+='<li class="sys_tips">'+getNowFormatDate().substring(0,16)+"&nbsp;"+xssscriptreplace(retobj.pcontent)+'</li>';
 				$('.newsList').append(answer);	

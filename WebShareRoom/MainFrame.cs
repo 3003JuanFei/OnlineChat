@@ -24,21 +24,23 @@ namespace WebShareRoom
             InitializeComponent();
         }
 
-        WebSocketServer server =null;
+        WebSocketServer server = null;
+        Queue<Object> msgqueue = new Queue<object>();//保存消息的列表
         private void button1_Click(object sender, EventArgs e)
         {
-            LogInfoInvoke("服务正在运行：运行参数，"+ comboBox1.Text+ ","+textBox1.Text.ToString());
+            LogInfoInvoke("服务正在运行：运行参数，" + comboBox1.Text + "," + textBox1.Text.ToString());
             FleckLog.Level = LogLevel.Debug;
             //var allSockets = new List<T_Entity>();
             var allSockets = new Dictionary<IWebSocketConnection, T_Entity>();
             if (comboBox1.Text.Equals("https"))
             {
-                server = new WebSocketServer("wss://0.0.0.0:"+textBox1.Text.ToString());
+                server = new WebSocketServer("wss://0.0.0.0:" + textBox1.Text.ToString());
             }
-            else {
-                server = new WebSocketServer("ws://0.0.0.0:"+textBox1.Text.ToString());
+            else
+            {
+                server = new WebSocketServer("ws://0.0.0.0:" + textBox1.Text.ToString());
             }
-            
+
             var flag = "私送";//私送,全体
             server.Start(socket =>
             {
@@ -63,8 +65,8 @@ namespace WebShareRoom
                     LogInfoInvoke("Close!");
                     T_Entity t = allSockets[socket];
                     t.msgtype = "userexit";
-                    t.onlineusercount = (allSockets.ToList().Count-1).ToString();
-                    t.pcontent ="用户"+ t.from_name + "离开聊天室";
+                    t.onlineusercount = (allSockets.ToList().Count - 1).ToString();
+                    t.pcontent = "用户" + t.from_name + "离开聊天室";
                     t.msgtype = "system_userexit";
                     allSockets.ToList().ForEach(s => {
                         s.Key.Send(JsonConvert.SerializeObject(t));
@@ -74,8 +76,8 @@ namespace WebShareRoom
                 };
                 socket.OnMessage = message =>
                 {
-                    LogInfoInvoke((message.Length>300)?message.Substring(0,300):message);
-                    T_Entity t=new T_Entity();
+                    LogInfoInvoke((message.Length > 300) ? message.Substring(0, 300) : message);
+                    T_Entity t = new T_Entity();
                     try
                     {
                         t = JsonConvert.DeserializeObject<T_Entity>(message);
@@ -92,26 +94,40 @@ namespace WebShareRoom
                         }
 
                         //获取当前在线用户
-                        if (t.msgtype.Equals("getOnlineUsers")) {
+                        if (t.msgtype.Equals("getOnlineUsers"))
+                        {
                             t.msgtype = "system_getOnlineUsers";
                             Hashtable ht = new Hashtable();
                             allSockets.ToList().ForEach(s => {
-                                ht.Add(s.Value.from_id,s.Value.from_name);
+                                ht.Add(s.Value.from_id, s.Value.from_name);
                             });
                             t.postto_id = t.from_id;
                             t.from_id = "";
                             t.pcontent = JsonConvert.SerializeObject(ht);
                         }
 
-                        if (t.msgtype.Equals("")|| t.msgtype.Equals("message")) {
+
+                        //获取消息
+                        if (t.msgtype.Equals("getPreMessage"))
+                        {
+                            t.msgtype = "system_getPreMessage";
+                            t.pcontent = JsonConvert.SerializeObject(msgqueue);
+                            t.postto_id = t.from_id;//私发送
+                            t.from_id = "";
+                        }
+
+
+                        if (t.msgtype.Equals("") || t.msgtype.Equals("message"))
+                        {
                             if (!t.postto_id.Equals(""))
                             {
                                 t.msgtype = "message_sf";
                             }
-                            else {
+                            else
+                            {
                                 t.msgtype = "message";
                             }
-                               
+
                         }
 
 
@@ -119,25 +135,38 @@ namespace WebShareRoom
                         {
                             flag = "私送";
                         }
-                        else{
+                        else
+                        {
                             flag = "全体";
                         }
                         //单独发送
                         if (flag.Equals("私送"))
                         {
                             allSockets.ToList().ForEach(s => {
-                                if (s.Value.from_id.Equals(t.postto_id)) {
+                                if (s.Value.from_id.Equals(t.postto_id))
+                                {
                                     s.Key.Send(JsonConvert.SerializeObject(t));//私法
                                 }
                             });
                         }
-                        else if(flag.Equals("全体"))//全体发送
+                        else if (flag.Equals("全体"))//全体发送
                         {
                             allSockets.ToList().ForEach(s => {
                                 s.Key.Send(JsonConvert.SerializeObject(t));
+
                             });
+                            //加入到消息列表中
+                            if (t.msgtype.Equals("message"))
+                            {
+                                msgqueue.Enqueue(t);
+                                if (msgqueue.Count > Convert.ToInt32(txt_msgcount.Text))
+                                {
+                                    msgqueue.Dequeue();
+                                }
+
+                            }
                         }
-                       
+
                     }
                     catch (Exception ex)
                     {
@@ -160,7 +189,7 @@ namespace WebShareRoom
 
         private void button2_Click(object sender, EventArgs e)
         {
-         
+
         }
 
         //定义文本框记录日志
@@ -180,7 +209,7 @@ namespace WebShareRoom
 
 
     class T_Entity
-    { 
+    {
         public string msgtype { get; set; }
         public string onlineusercount { get; set; }
         public string postto_id { get; set; }

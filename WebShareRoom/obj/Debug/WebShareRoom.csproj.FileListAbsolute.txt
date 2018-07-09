@@ -12,3 +12,17 @@ D:\DevelopProjects\VSProject\WebShareRoom\WebShareRoom\bin\Debug\Fleck.pdb
 D:\DevelopProjects\VSProject\WebShareRoom\WebShareRoom\bin\Debug\Newtonsoft.Json.dll
 D:\DevelopProjects\VSProject\WebShareRoom\WebShareRoom\bin\Debug\Newtonsoft.Json.pdb
 D:\DevelopProjects\VSProject\WebShareRoom\WebShareRoom\obj\Debug\WebShareRoom.csprojResolveAssemblyReference.cache
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\bin\Debug\WebShareRoom.exe.config
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\bin\Debug\WebShareRoom.exe
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\bin\Debug\WebShareRoom.pdb
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\bin\Debug\Fleck.dll
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\bin\Debug\Newtonsoft.Json.dll
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\bin\Debug\Fleck.pdb
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\bin\Debug\Newtonsoft.Json.pdb
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\obj\Debug\WebShareRoom.csprojResolveAssemblyReference.cache
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\obj\Debug\WebShareRoom.MainFrame.resources
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\obj\Debug\WebShareRoom.Properties.Resources.resources
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\obj\Debug\WebShareRoom.csproj.GenerateResource.Cache
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\obj\Debug\WebShareRoom.csproj.CoreCompileInputs.cache
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\obj\Debug\WebShareRoom.exe
+D:\DevelopProjects\VSProject\WebShareRoom\在线聊天工具仓库\chat\WebShareRoom\obj\Debug\WebShareRoom.pdb
