@@ -219,5 +219,6 @@ namespace WebShareRoom
         public string from_name { get; set; }
         public string from_headimg { get; set; }
         public string pcontent { get; set; }
+        public string posttime { get; set; }
     }
 }

@@ -6,20 +6,39 @@
 
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="stylesheet" type="text/css" href="libs/layerUI/2.2.5/css/layui.css">
+<link rel="stylesheet" href="css/downla.css" />
+<script type="text/javascript" src="js/downla.js"></script>
+<script type="text/javascript" src="js/hs.js"></script>
+<script type="text/javascript" src="js/xssfilter.js"></script>
 </head>
 <body>
 
 <div class="mainBox">
 	<div class="BoxHead">
 		<div class="headImg">
-			<img src="img/6.jpg">
+			<img src="img/head001.jpg">
 		</div>
-		<div class="internetName"><B>柒月风华在线交流平台</B></div>
+		<div class="internetName"><B>柒月风华 - 探索未知的世界</B>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:15px;"> 建议使用谷歌浏览器,或者极速模式浏览</span>
+		</div>
+		<div class="rightTags">公告栏</div>
 	</div>
 	<div class="context">
+		<div class="conLeft">
+			<ul>
+				<li class="bg">
+					<div class="liLeft"><img src="img/head001.jpg"></div>
+					<div class="liRight">
+						<span class="intername">柒月风华</span>
+						<span class="infor">公共聊天室</span>
+					</div>
+				</li>
+				
+			</ul>
+		</div>
+		
 		<div class="conRight">
 			<div class="Righthead">
-				<div class="headName">柒月风华-全体交流</div>
+				<div class="headName">柒月风华&nbsp;&nbsp;&nbsp;<a href="#" onclick="setnicheng()"><span style="font-size:15px;" id="myname"></span></div></a>
 				<div class="headConfig">
 					<ul>
 						<li>在线人数：<b><span id='onlineusercount'>1</span></b></li>
@@ -32,6 +51,31 @@
 				</ul>
 			</div>
 			<div class="RightFoot">
+				<div class="siliao_div">私聊人员：
+				
+				
+				
+				
+				 
+
+
+<div class="pre" id="input1">
+	<input class="newinput" type="text" placeholder="全体">
+	<div class="input_div" style="display: none;">
+		<span class="soption" data-val="">全体</span>
+
+
+	</div>
+	<input class="savedata" type="hidden" value=''>
+	<div style="clear:both"></div>
+</div>
+
+
+				
+				
+				
+				
+				</div>
 				<div class="inputBox">
 					<textarea id="dope" class="layui-textarea" style="display: none;" name="" rows="" cols=""></textarea>
 					
@@ -39,6 +83,24 @@
 					<button class="sendBtn">发送(s)</button>
 				</div>
 			</div>
+		</div>
+		<div class="conRight_gg">
+		<br><br><br>
+		通知公告<br><br>
+		<span style="line-height:30px;">
+		刚才网站正在调整,<br>
+		可能会有弹窗 ,关闭即可~!抱歉<br><br>
+
+		后续会继续完善~<br>
+		如何您想寻找问题的答案,<br>
+		请使用论坛BBS发布问题<br>
+		<a href="https://www.3003soft.top/LBBS" target="_blank" style="color:red;">柒月风华</a><br>
+		GitHub地址:<a href="https://github.com/LightXYZ/OnlineChat" target="_blank">GitHub地址</a><br>
+		</span>
+		<span style="line-height:30px;float:right;">
+		BY：站长管理员&nbsp;&nbsp;&nbsp;
+		</span>
+		
 		</div>
 	</div>
 </div>
@@ -48,18 +110,48 @@
 <script type="text/javascript" src="js/chat.js"></script>
 <script type="text/javascript">
 		//sessionStorage.clear();
-		var arr=["img/20170926103645_19.jpg","img/20170926103645_03_02.jpg","img/20170926103645_19.jpg","img/20170926103645_54.jpg","img/20170926103645_29.jpg","img/20170926103645_04.jpg","img/20170926103645_03_02.jpg","img/20170926103645_27.jpg"];
+		var arr=["img/20170926103645_19.jpg","img/20170926103645_03_02.jpg","img/20170926103645_19.jpg","img/20170926103645_54.jpg","img/20170926103645_29.jpg","img/20170926103645_04.jpg","img/tou.jpg","img/20170926103645_27.jpg"];
 		var aa=Math.floor((Math.random()*arr.length));
 	    var data_name = sessionStorage.getItem('cr_name');
 	    var data_img = sessionStorage.getItem('cr_img');
 	    var guid="";
-	    if(data_name==null||data_name=='undefined'||data_name==''){
-			var user = prompt("请输入你的名字:","");
-          	if (user!="" && user!=null){
-            	sessionStorage.setItem('cr_name', user);
-        	}
-	    }
-	    if(data_img==null||data_img=='undefined'||data_img==''){sessionStorage.setItem('cr_img', arr[aa]);}
+		var online_user_arr= new HashMap(); 
+		
+		$(function(){
+			if(data_name==null||data_name=='undefined'||data_name==''){
+				var user = prompt("请输入你的名字:","");
+				user=xssscriptreplace(user);
+				if (user!="" && user!=null && user!="null"){
+					sessionStorage.setItem('cr_name', user);
+				}else{sessionStorage.setItem('cr_name', "游客");}
+				<!-- layer.prompt({title: '请输入你的名字:', formType: 0}, function(pass, index){ -->
+					<!-- if (pass!="" && pass!=null){ -->
+						<!-- sessionStorage.setItem('cr_name', pass); -->
+					<!-- } -->
+					 <!-- layer.close(index); -->
+				<!-- }); -->
+			}
+			if(data_img==null||data_img=='undefined'||data_img==''){sessionStorage.setItem('cr_img', arr[aa]);}
+			
+		})
+	    
+		
+		function setnicheng(){
+			<!-- var user = prompt("更新您的昵称:",""); -->
+          	<!-- if (user!="" && user!=null){ -->
+            	<!-- sessionStorage.setItem('cr_name', user); -->
+        	<!-- } -->
+			
+			layer.prompt({title: '更新您的昵称:', formType: 0}, function(pass, index){
+				//pass=pass.replace(/<script.*?>.*?<//script>/ig, ''); 
+				pass=xssscriptreplace(pass);
+				if (pass!="" && pass!=null&&pass!="null"){
+					sessionStorage.setItem('cr_name', pass);
+				}else{sessionStorage.setItem('cr_name', "游客");}
+				 layer.close(index);
+				 location.reload();
+			});
+		}
 </script>
 <script type="text/javascript">
     var start = function () {
@@ -76,20 +168,94 @@
 		// when data is comming from the server, this metod is called
 		ws.onmessage = function (evt) {
 			var retobj=jQuery.parseJSON(evt.data)
+			//自己的消息，不接受
+			if(retobj.from_id==guid){$("#myname").empty().append("昵称："+retobj.from_name);return;} 
 			//console.log(evt.data)
 			$("#onlineusercount").text(retobj.onlineusercount);
-			if(retobj.msgtype=='userenter'){guid=retobj.from_id;}
-			if(!(retobj.msgtype=='message'&&retobj.from_id!=guid||retobj.msgtype=='userenter')){return;}
 			
-			//if(retobj!="message"){return;}
-			var answer='';
-			answer+='<li>'+
-						'<div class="nesHead"><img src="'+retobj.from_headimg+'"/></div>'+
-						'<div class="new_name">'+retobj.from_name+'</div>'+
-						'<div class="news"><img class="jiao" src="img/jiao.jpg">'+retobj.pcontent+'</div>'+
-					'</li>';
-			$('.newsList').append(answer);	
-			$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+			if(retobj.msgtype=='userenter'){
+				guid=retobj.from_id;
+				var answer='';
+				answer+='<li class="sys_tips">'+xssscriptreplace(retobj.pcontent)+'</li>';
+				$('.newsList').append(answer);	
+				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+				//发送上线消息
+				var jsonobj={msgtype:'userenter_reqgb',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:"要求服务器发送上线广播"}
+				ws.send(JSON.stringify(jsonobj));
+				//获取当前所有用户信息
+				jsonobj={msgtype:'getOnlineUsers',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:"要求发送用户信息"}
+				ws.send(JSON.stringify(jsonobj));
+				
+				//获取历史消息
+				var jobj={msgtype:'getPreMessage',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:"获取历史消息"}
+				ws.send(JSON.stringify(jobj));
+				
+				
+			}
+			
+			if(retobj.msgtype.split("_")[0]=="system"){
+				var opt=retobj.msgtype.split("_")[1];
+				if(opt=="userenter"){
+					online_user_arr.put(retobj.from_id,xssscriptreplace(retobj.from_name));
+					
+					$(".input_div").append('<span class="soption" data-val="'+retobj.from_id+'">'+xssscriptreplace(retobj.from_name)+'</span>');
+					BindEvet(retobj.from_id,"input1");
+				}
+				if(opt=="userexit"){online_user_arr.remove(retobj.from_id);$('[data-val="'+retobj.from_id+'"]').remove();}
+				
+				if(opt=="getOnlineUsers"){
+					//console.log(retobj.pcontent);
+					var onlineuser=$.parseJSON(retobj.pcontent);
+					$.each(onlineuser, function(key, val) {
+						online_user_arr.put(key,xssscriptreplace(val));
+						$(".input_div").append('<span class="soption" data-val="'+key+'">'+xssscriptreplace(val)+'</span>');
+						BindEvet(key,"input1");
+					});
+
+					retobj.pcontent="获取在线用户信息成功~";
+				}
+				
+				if(opt=="getPreMessage"){
+					//console.log(retobj.pcontent)
+					
+					var msgqueue=$.parseJSON(retobj.pcontent);
+					$.each(msgqueue, function(key, val) {
+						//console.log(val)
+						var answer='';
+						answer+='<li>'+
+									'<div class="nesHead"><img src="'+xssscriptreplace(val.from_headimg)+'"/></div>'+
+									'<div class="new_name">'+xssscriptreplace(val.from_name)+"&nbsp;"+val.posttime+'</div>'+
+									'<div class="news"><img class="jiao" src="img/jiao.jpg">'+val.pcontent+'</div>'+
+								'</li>';
+						$('.newsList').append(answer);	
+						$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+					});
+					//return;
+					retobj.pcontent="以上是历史消息,欢迎发言~~";
+				}
+				
+				var answer='';
+				answer+='<li class="sys_tips">'+getNowFormatDate().substring(0,16)+"&nbsp;"+xssscriptreplace(retobj.pcontent)+'</li>';
+				$('.newsList').append(answer);	
+				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+			}
+
+			if(retobj.msgtype.split("_")[0]=="message"){
+				var sfstatus="";
+				if(retobj.msgtype.split("_")[1]=='sf'){sfstatus="&nbsp;私密发送";}
+				var answer='';
+				answer+='<li>'+
+							'<div class="nesHead"><img src="'+xssscriptreplace(retobj.from_headimg)+'"/></div>'+
+							'<div class="new_name">'+xssscriptreplace(retobj.from_name)+"&nbsp;"+getNowFormatDate().substring(0,16)+sfstatus+'</div>'+
+							'<div class="news"><img class="jiao" src="img/jiao.jpg">'+retobj.pcontent+'</div>'+
+						'</li>';
+				$('.newsList').append(answer);	
+				$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
+				playSound();
+			}
+			
+			
+			
 		};
 
 		// when the connection is established, this method is called
@@ -114,26 +280,107 @@
 </script>
 <script>
 	$('.sendBtn').on('click',function(){
-		var ans_news=GetContent();;
+	/*$("#LAY_layedit_1").contents().find("body").on('keyup',function(event){
+		  if(event.keyCode ==13){
+			$(".sendBtn").trigger("click");
+		  }
+		});*/
+		var ans_news=GetContent();
+		if(ans_news.length>300){
+		layer.msg('您输入的内容太多了');
+		<!-- alert("您输入的内容太多了~"); -->
+		return false;}
 		if(ans_news==''){
-			alert('不能为空');
+			<!-- alert('不能为空'); -->
+			layer.msg('输入内容不能为空');
+			//SetContent(GetContent().replace(/<br>/g,""))
+			return;
 		}else{
 			SetContent("");
 			var str='';
+			var smflag=($(".savedata").val()=="")?"":"&nbsp;私密发送";
 			str+='<li>'+
 				'<div class="answerHead"><img src="'+sessionStorage.getItem('cr_img')+'"/></div>'+
-				'<div class="answer_name">'+sessionStorage.getItem('cr_name')+'</div>'+
+				'<div class="answer_name">'+sessionStorage.getItem('cr_name')+"&nbsp;"+getNowFormatDate().substring(0,16)+smflag+'</div>'+
 				'<div class="answers"><img class="jiao" src="img/20170926103645_03_02.jpg">'+ans_news+'</div>'+
 			'</li>';
 			$('.newsList').append(str);
 			//setTimeout(answers_news,1000); 
-			$('.conLeft').find('li.bg').children('.liRight').children('.infor').text((ans_news.length>9)?ans_news.substring(0,9)+'...':ans_news.substring(0,9));
+			<!-- $('.conLeft').find('li.bg').children('.liRight').children('.infor').text((ans_news.length>9)?ans_news.substring(0,9)+'...':ans_news.substring(0,9)); -->
 			$('.RightCont').scrollTop($('.RightCont')[0].scrollHeight );
 			
-			var jsonobj={msgtype:'',onlineusercount:'',postto_id:'',postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:ans_news}
+			var jsonobj={msgtype:'',onlineusercount:'',postto_id:$(".savedata").val(),postto_name:'',postto_headimg:'',from_id:guid,from_name:sessionStorage.getItem('cr_name'),from_headimg:sessionStorage.getItem('cr_img'),pcontent:ans_news,posttime:getNowFormatDate().substring(0,16)}
 			ws.send(JSON.stringify(jsonobj));
 		}
 	})
+	
+
+
 </script>
+
+<script type="text/javascript">
+$(".rightTags").click(function(){$(".conRight_gg").toggle();});
+$(".headImg").click(function(){$(".conLeft").toggle();});
+</script>
+
+<script type="text/javascript">
+function getNowFormatDate() {
+    return new Date().Format("yyyy-MM-dd hh:mm");;
+}
+Date.prototype.Format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+</script>
+
+
+
+<script type="text/javascript">
+new inputSelect("input1","txt1");
+</script>
+
+
+<script language="javascript">
+playSound();
+function playSound()
+    {
+      var borswer = window.navigator.userAgent.toLowerCase();
+      if ( borswer.indexOf( "ie" ) >= 0 )
+      {
+        //IE内核浏览器
+        var strEmbed = '<embed name="embedPlay" src="http://3003soft.top/im/dingdong.mp3" autostart="true" hidden="true" loop="false"></embed>';
+        if ( $( "body" ).find( "embed" ).length <= 0 )
+          $( "body" ).append( strEmbed );
+        var embed = document.embedPlay;
+
+        //浏览器不支持 audion，则使用 embed 播放
+        embed.volume = 100;
+        //embed.play();这个不需要
+      } else
+      {
+        //非IE内核浏览器
+        var strAudio = "<audio id='audioPlay' src='http://3003soft.top/im/dingdong.mp3' hidden='true'>";
+        if ( $( "body" ).find( "audio" ).length <= 0 )
+          $( "body" ).append( strAudio );
+        var audio = document.getElementById( "audioPlay" );
+
+        //浏览器支持 audion
+        audio.play();
+      }
+    }
+</script>
+
+
 </body>
 </html>
